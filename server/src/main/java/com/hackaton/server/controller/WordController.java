@@ -35,7 +35,7 @@ public class WordController {
             .build());
         response.getResult().add(LetterResult.builder()
             .letter("U")
-            .result(LetterResultType.WRONG)
+            .result(LetterResultType.WRONG_POSITION)
             .build());
         response.getResult().add(LetterResult.builder()
             .letter("I")
@@ -43,7 +43,7 @@ public class WordController {
             .build());
         response.getResult().add(LetterResult.builder()
             .letter("C")
-            .result(LetterResultType.WRONG)
+            .result(LetterResultType.WRONG_POSITION)
             .build());
         response.getResult().add(LetterResult.builder()
             .letter("K")
