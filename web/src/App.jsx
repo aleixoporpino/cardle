@@ -9,10 +9,19 @@ function App() {
       mode: 'dark',
       primary: {
         main: '#1abb99',
-        contrastText: '#000',
+        disabled: '#1abb99',
       },
       secondary: {
-        main: '#FFFFFF',
+        main: '#FFF',
+        disabled: '#FFF',
+      },
+      warning: {
+        main: '#ffa826',
+        disabled: '#ffa826',
+      },
+      error: {
+        main: '#f44336',
+        disabled: '#f44336',
       },
     },
   });

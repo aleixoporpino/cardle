@@ -3,19 +3,18 @@ import { Box } from '@mui/material';
 import { guess } from '../api/wordApi';
 import TilesRow from './TilesRow';
 import GuessResult from '../enums/GuessResult';
+import ResultModal from './ResultModal';
 
 const Board = ({ maxRows }) => {
   const initialTiles = [
-    { letter: '', result: GuessResult.INITIAL },
-    { letter: '', result: GuessResult.INITIAL },
-    { letter: '', result: GuessResult.INITIAL },
-    { letter: '', result: GuessResult.INITIAL },
-    { letter: '', result: GuessResult.INITIAL },
+    { letter: '', result: GuessResult.INITIAL, focus: true },
+    { letter: '', result: GuessResult.INITIAL, focus: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false },
   ];
   const [tilesValues, setTilesValues] = useState([initialTiles]);
-
-  const [guessNumber, setGuessNumber] = useState(1);
-  const [guessResult, setGuessResult] = useState({});
+  const [openResultModal, setOpenResultModal] = useState(false);
 
   const handleTileValueChange = (e, columnIndex, rowIndex) => {
     let letter = e.target.value;
@@ -32,18 +31,24 @@ const Board = ({ maxRows }) => {
   const handleKeyDown = (e) => {
     if (e.code === 'Enter' || e.key === 'Enter') {
       console.log('Enter pressed');
-      guess('test', tilesValues.length).then((response) => {
-        // setGuessResult(response.data)
-        console.log(response.data);
-        const newTilesValues = [...tilesValues];
-        newTilesValues[tilesValues.length - 1] = response.data.result;
-        //TODO: Prevent user to send empty tiles
-        //TODO: Check if everything is correct
-        if (tilesValues.length < maxRows) {
-          newTilesValues.push(initialTiles);
-        }
-        setTilesValues(newTilesValues);
-      });
+
+      const isAllTilesFilled = !tilesValues.find((tiles) =>
+        tiles.find((tile) => tile.letter === ''),
+      );
+      if (isAllTilesFilled) {
+        guess('test', tilesValues.length).then((response) => {
+          const newTilesValues = [...tilesValues];
+          newTilesValues[tilesValues.length - 1] = response.data.result;
+          //TODO: Check correctness
+          if (tilesValues.length < maxRows) {
+            newTilesValues.push(initialTiles);
+          } else {
+            setOpenResultModal(true);
+            return;
+          }
+          setTilesValues(newTilesValues);
+        });
+      }
     }
   };
   return (
@@ -58,6 +63,12 @@ const Board = ({ maxRows }) => {
           disabled={tilesValues.length - 1 !== index}
         />
       ))}
+      <ResultModal
+        open={openResultModal}
+        totalGuesses={tilesValues.length}
+        answer={'arise'}
+        handleClose={() => setOpenResultModal(false)}
+      />
     </Box>
   );
 };

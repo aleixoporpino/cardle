@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, TextField } from '@mui/material';
 import GuessResult from '../enums/GuessResult';
 
-const Tile = ({ id, index, tile, onChange, onKeyDown, disabled, autofocus }) => {
+const Tile = ({ id, index, tile, onChange, onKeyDown, disabled }) => {
   const getTrueColor = (muiColor) => {
     if (muiColor === 'error') {
       return '#f44336';
@@ -14,6 +14,7 @@ const Tile = ({ id, index, tile, onChange, onKeyDown, disabled, autofocus }) => 
       return '#ffffff';
     }
   };
+  const tileColor = getTrueColor(GuessResult[tile.result] || tile.result);
   return (
     <Grid id={`tileBox${id}`} sx={{ px: 2 }} item>
       <TextField
@@ -29,13 +30,15 @@ const Tile = ({ id, index, tile, onChange, onKeyDown, disabled, autofocus }) => 
             textAlign: 'center',
             fontSize: 18,
             fontWeight: 'bold',
-            color: getTrueColor(GuessResult[tile.result] || tile.result),
+            color: tileColor,
+            borderColor: tileColor,
+            WebkitTextFillColor: tileColor,
           },
         }}
         onChange={(e) => onChange(e)}
         onKeyDown={(e) => onKeyDown(e)}
         disabled={disabled}
-        autoFocus={autofocus}
+        autoFocus={tile.focus}
         color={GuessResult[tile.result] || tile.result}
       />
     </Grid>

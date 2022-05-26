@@ -13,7 +13,6 @@ const TilesRow = ({ tilesValues, handleTileValueChange, handleKeyDown, columnInd
         tile={tilesValues[columnIndex][0]}
         onKeyDown={(e) => handleKeyDown(e)}
         disabled={disabled}
-        autofocus
       />
       <Tile
         key={`tile${columnIndex}1`}
