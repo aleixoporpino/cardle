@@ -1,6 +1,5 @@
 import './App.css';
-import Tile from './components/Tile';
-import { Box, Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Header from './components/Header';
 import Board from './components/Board';
 
@@ -12,6 +11,9 @@ function App() {
         main: '#1abb99',
         contrastText: '#000',
       },
+      secondary: {
+        main: '#FFFFFF',
+      },
     },
   });
   return (
@@ -19,7 +21,7 @@ function App() {
       <CssBaseline />
       <Container sx={{ pt: 3, textAlign: 'center' }}>
         <Header />
-        <Board sizeX={2} />
+        <Board maxRows={5} />
       </Container>
     </ThemeProvider>
   );

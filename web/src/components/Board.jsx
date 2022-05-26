@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import { Grid } from '@mui/material';
-import Tile from './Tile';
+import { Box } from '@mui/material';
 import { guess } from '../api/wordApi';
+import TilesRow from './TilesRow';
+import GuessResult from '../enums/GuessResult';
 
-const Board = ({ sizeX, sizeY }) => {
-  const [tilesValues, setTilesValues] = useState(['', '', '', '', '']);
+const Board = ({ maxRows }) => {
+  const initialTiles = [
+    { letter: '', result: GuessResult.INITIAL },
+    { letter: '', result: GuessResult.INITIAL },
+    { letter: '', result: GuessResult.INITIAL },
+    { letter: '', result: GuessResult.INITIAL },
+    { letter: '', result: GuessResult.INITIAL },
+  ];
+  const [tilesValues, setTilesValues] = useState([initialTiles]);
 
-  const handleTileValueChange = (e, index) => {
-    const letter = Object.values(e.target.value)[1];
+  const [guessNumber, setGuessNumber] = useState(1);
+  const [guessResult, setGuessResult] = useState({});
+
+  const handleTileValueChange = (e, columnIndex, rowIndex) => {
+    let letter = e.target.value;
+    if (letter.length > 1) {
+      letter = Object.values(e.target.value)[1];
+    }
     if (!/[^a-zA-Z]/.test(letter)) {
       const newTilesValues = [...tilesValues];
-      newTilesValues[index] = letter;
+      newTilesValues[columnIndex][rowIndex].letter = letter;
       setTilesValues(newTilesValues);
     }
   };
@@ -18,42 +32,33 @@ const Board = ({ sizeX, sizeY }) => {
   const handleKeyDown = (e) => {
     if (e.code === 'Enter' || e.key === 'Enter') {
       console.log('Enter pressed');
-      guess('test', 2).then((response) => console.log(response));
+      guess('test', tilesValues.length).then((response) => {
+        // setGuessResult(response.data)
+        console.log(response.data);
+        const newTilesValues = [...tilesValues];
+        newTilesValues[tilesValues.length - 1] = response.data.result;
+        //TODO: Prevent user to send empty tiles
+        //TODO: Check if everything is correct
+        if (tilesValues.length < maxRows) {
+          newTilesValues.push(initialTiles);
+        }
+        setTilesValues(newTilesValues);
+      });
     }
   };
   return (
-    <Grid id='boardGrid' container>
-      <Tile
-        index={0}
-        onChange={(e) => handleTileValueChange(e, 0)}
-        value={tilesValues[0]}
-        onKeyDown={(e) => handleKeyDown(e)}
-      />
-      <Tile
-        index={1}
-        onChange={(e) => handleTileValueChange(e, 1)}
-        value={tilesValues[1]}
-        onKeyDown={(e) => handleKeyDown(e)}
-      />
-      <Tile
-        index={2}
-        onChange={(e) => handleTileValueChange(e, 2)}
-        value={tilesValues[2]}
-        onKeyDown={(e) => handleKeyDown(e)}
-      />
-      <Tile
-        index={3}
-        onChange={(e) => handleTileValueChange(e, 3)}
-        value={tilesValues[3]}
-        onKeyDown={(e) => handleKeyDown(e)}
-      />
-      <Tile
-        index={4}
-        onChange={(e) => handleTileValueChange(e, 4)}
-        value={tilesValues[4]}
-        onKeyDown={(e) => handleKeyDown(e)}
-      />
-    </Grid>
+    <Box>
+      {tilesValues.map((result, index) => (
+        <TilesRow
+          key={`tilesRow${index}`}
+          tilesValues={tilesValues}
+          handleTileValueChange={handleTileValueChange}
+          handleKeyDown={handleKeyDown}
+          columnIndex={index}
+          disabled={tilesValues.length - 1 !== index}
+        />
+      ))}
+    </Box>
   );
 };
 
