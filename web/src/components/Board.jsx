@@ -37,6 +37,8 @@ const Board = ({ wordLength, maxAttempts }) => {
             setOpenResultModal(true);
           } else if (tilesMatrix.length < maxAttempts) {
             newTilesValues.push(initialTiles);
+          } else {
+            setOpenResultModal(true);
           }
           setTilesMatrix(newTilesValues);
         });

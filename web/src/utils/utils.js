@@ -34,3 +34,9 @@ export const hydrateResult = (tiles) => {
     return { ...tile, focus: index === 0, disabled: true };
   });
 };
+
+export const getAnswer = (tilesMatrix) => {
+  const lastRowIndex = tilesMatrix.length - 1;
+  const lastColumnIndex = tilesMatrix[lastRowIndex].length - 1;
+  return tilesMatrix[lastRowIndex][lastColumnIndex].answer;
+};

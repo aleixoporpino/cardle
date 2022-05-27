@@ -12,10 +12,12 @@ import {
 } from '@mui/material';
 import GuessResult from '../enums/GuessResult';
 import Countdown from './Countdown';
+import { getAnswer, isGuessCorrect } from '../utils/utils';
 
 const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const won = isGuessCorrect(tilesMatrix);
 
   const printMatrixResult = () => {
     return tilesMatrix.map((row, index) => (
@@ -30,6 +32,11 @@ const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
       </div>
     ));
   };
+
+  const title = won ? 'Congratulations!' : 'You lost!';
+  const resultText = won
+    ? `You won in ${totalGuesses} ${totalGuesses === 1 ? 'guess' : 'guesses'}`
+    : 'The word was: ' + getAnswer(tilesMatrix);
 
   return (
     <Dialog
@@ -53,14 +60,11 @@ const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
             <CloseIcon />
           </IconButton>
         ) : null}
-        {'Congratulations!'}
+        {title}
       </DialogTitle>
       <DialogContent>
         <Box sx={{ textAlign: 'center' }}>{printMatrixResult()}</Box>
-        <DialogContentText sx={{ pt: 2 }}>
-          You won in {totalGuesses} {`${totalGuesses === 1 ? 'guess' : 'guesses'}`}
-        </DialogContentText>
-
+        <DialogContentText sx={{ pt: 2 }}>{resultText}</DialogContentText>
         <Countdown />
       </DialogContent>
     </Dialog>
