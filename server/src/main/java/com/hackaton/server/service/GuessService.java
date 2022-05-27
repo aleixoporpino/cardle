@@ -2,8 +2,6 @@ package com.hackaton.server.service;
 
 import com.hackaton.server.domain.dto.*;
 import com.hackaton.server.repository.GameRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
