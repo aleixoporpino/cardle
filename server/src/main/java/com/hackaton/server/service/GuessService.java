@@ -39,6 +39,7 @@ public class GuessService {
         evaluateWrongPosition(guessLetters, answerLetters);
 
         response.setGuessNumber(request.getGuessNumber());
+        response.setGameId(game.getId());
 
         return response;
     }
@@ -56,7 +57,7 @@ public class GuessService {
     private void evaluateWrongPosition(List<GuessLetter> guessLetters, List<AnswerLetter> wordLetters) {
         for (final var guessLetter : guessLetters) {
             if (guessLetter.getResult() != null) {
-                return;
+                continue;
             }
 
             final var match = wordLetters.stream()
