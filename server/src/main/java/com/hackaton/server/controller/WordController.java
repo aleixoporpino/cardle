@@ -29,6 +29,7 @@ public class WordController {
         final var response = new GameResponse();
         response.setGameId(game.getId());
         response.setWordLength(game.getMake().getName().length());
+        response.setGameEnd(game.getGameEnd());
 
         return response;
     }
