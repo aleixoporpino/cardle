@@ -6,12 +6,10 @@ import GuessResult from '../enums/GuessResult';
 import ResultModal from './ResultModal';
 import { getTilesLetters, hydrateResult, isAllTilesFilled, isGuessCorrect } from '../utils/utils';
 
-const Board = ({ wordLength }) => {
-
-  const initialTiles =
-      Array.apply(null, Array(wordLength)).map(() => {
-        return {letter: '', result: GuessResult.INITIAL, focus: true, disabled: false}
-      });
+const Board = ({ wordLength, maxAttempts }) => {
+  const initialTiles = Array.apply(null, Array(wordLength)).map((word, index) => {
+    return { letter: '', result: GuessResult.INITIAL, focus: index === 0, disabled: false };
+  });
 
   const [tilesMatrix, setTilesMatrix] = useState([initialTiles]);
   const [openResultModal, setOpenResultModal] = useState(false);
@@ -37,7 +35,7 @@ const Board = ({ wordLength }) => {
 
           if (isGuessCorrect(newTilesValues)) {
             setOpenResultModal(true);
-          } else if (tilesMatrix.length < wordLength) {
+          } else if (tilesMatrix.length < maxAttempts) {
             newTilesValues.push(initialTiles);
           }
           setTilesMatrix(newTilesValues);

@@ -41,9 +41,7 @@ function App() {
       <CssBaseline />
       <Container sx={{ pt: 3, textAlign: 'center' }}>
         <Header />
-        {game &&
-        <Board wordLength={game.wordLength}/>
-        }
+        {game && <Board wordLength={game.wordLength} maxAttempts={5} />}
       </Container>
     </ThemeProvider>
   );
