@@ -11,14 +11,15 @@ import {
   useTheme,
 } from '@mui/material';
 import GuessResult from '../enums/GuessResult';
+import Countdown from './Countdown';
 
 const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const printMatrixResult = () => {
-    return tilesMatrix.map((row) => (
-      <div>
+    return tilesMatrix.map((row, index) => (
+      <div key={index}>
         {row.map((tile) => {
           return GuessResult[tile.result] === GuessResult.CORRECT
             ? '🟩 \n'
@@ -59,6 +60,8 @@ const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
         <DialogContentText sx={{ pt: 2 }}>
           You won in {totalGuesses} {`${totalGuesses === 1 ? 'guess' : 'guesses'}`}
         </DialogContentText>
+
+        <Countdown />
       </DialogContent>
     </Dialog>
   );

@@ -22,7 +22,7 @@ const Board = ({ wordLength }) => {
     if (letter.length > 1) {
       letter = Object.values(e.target.value)[1];
     }
-    if (!/[^a-zA-Z]/.test(letter)) {
+    if (!/[^a-zA-Z0-9]/.test(letter)) {
       const newTilesValues = [...tilesMatrix];
       newTilesValues[columnIndex][rowIndex].letter = letter;
       setTilesMatrix(newTilesValues);

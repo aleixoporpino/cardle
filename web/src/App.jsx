@@ -10,6 +10,7 @@ function App() {
   useEffect(() => {
     getGame().then((response) => {
       localStorage.setItem('gameId', response.data.gameId);
+      localStorage.setItem('gameEnd', response.data.gameEnd);
       setGame(response.data);
     });
   }, []);
