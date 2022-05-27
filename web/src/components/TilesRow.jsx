@@ -7,8 +7,8 @@ const TilesRow = ({ tilesValues, handleTileValueChange, handleKeyDown, columnInd
     for (let i = 0; i < tilesValues[columnIndex].length; i++) {
         tiles.push(
             <Tile
-                key={`tile${columnIndex}i`}
-                id={`tile${columnIndex}i`}
+                key={`tile${columnIndex}${i}`}
+                id={`tile${columnIndex}${i}`}
                 rowIndex={i}
                 onChange={(e) => handleTileValueChange(e, columnIndex, i)}
                 tile={tilesValues[columnIndex][i]}
