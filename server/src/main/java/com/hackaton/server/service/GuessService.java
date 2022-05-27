@@ -21,7 +21,12 @@ public class GuessService {
         final var game = gameRepository.findById(request.getGameId())
             .orElseThrow(() -> new RuntimeException("Invalid game"));
 
-        final var answer = game.getMake().getName().toUpperCase();
+        final var wordWithNoSpacesOrDashes = game.getMake().getName()
+            .replaceAll("-", "")
+            .replaceAll(" ", "");
+        final var answer = wordWithNoSpacesOrDashes.toUpperCase();
+
+
         final var guess = request.getWord().toUpperCase();
 
         if (answer.length() != guess.length()) {

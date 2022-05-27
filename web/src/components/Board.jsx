@@ -7,13 +7,12 @@ import ResultModal from './ResultModal';
 import { getTilesLetters, hydrateResult, isAllTilesFilled, isGuessCorrect } from '../utils/utils';
 
 const Board = ({ wordLength }) => {
-  const initialTiles = [
-    { letter: '', result: GuessResult.INITIAL, focus: true, disabled: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
-  ];
+
+  const initialTiles =
+      Array.apply(null, Array(wordLength)).map(() => {
+        return {letter: '', result: GuessResult.INITIAL, focus: true, disabled: false}
+      });
+
   const [tilesMatrix, setTilesMatrix] = useState([initialTiles]);
   const [openResultModal, setOpenResultModal] = useState(false);
 
