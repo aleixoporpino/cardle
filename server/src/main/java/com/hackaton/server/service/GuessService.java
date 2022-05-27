@@ -1,13 +1,16 @@
 package com.hackaton.server.service;
 
-import com.hackaton.server.domain.dto.GuessRequest;
-import com.hackaton.server.domain.dto.GuessResponse;
-import com.hackaton.server.domain.dto.LetterResult;
-import com.hackaton.server.domain.dto.LetterResultType;
+import com.hackaton.server.domain.dto.*;
 import com.hackaton.server.repository.GameRepository;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,40 +23,55 @@ public class GuessService {
         final var game = gameRepository.findById(request.getGameId())
             .orElseThrow(() -> new RuntimeException("Invalid game"));
 
-        final var word = game.getMake().getName().toUpperCase();
-        final var wordGuess = request.getWord().toUpperCase();
+        final var answer = game.getMake().getName().toUpperCase();
+        final var guess = request.getWord().toUpperCase();
 
-        if (word.length() != wordGuess.length()) {
+        if (answer.length() != guess.length()) {
             throw new RuntimeException("Guess has incorrect number of letters");
         }
 
-        final var response = new GuessResponse();
-        final var result = response.getResult();
+        final var response = new GuessResponse(guess);
+        final var guessLetters = response.getResult();
 
-        for (int i = 0; i < word.length(); i++) {
-            result.add(LetterResult.builder()
-                    .letter(wordGuess.substring(i, i + 1))
-                    .result(getLetterResult(word, wordGuess, i))
-                .build());
-        }
+        final var answerLetters = Arrays.stream(answer.split(""))
+            .map(it -> new AnswerLetter(it, false))
+            .collect(Collectors.toList());
+
+        evaluateCorrect(guessLetters, answerLetters);
+        evaluateWrongPosition(guessLetters, answerLetters);
 
         response.setGuessNumber(request.getGuessNumber());
 
         return response;
     }
 
-    private LetterResultType getLetterResult(String word, String wordGuess, int letterAt) {
-        final var letterGuess = wordGuess.substring(letterAt, letterAt + 1);
-        if (letterGuess.equals(word.substring(letterAt, letterAt + 1))) {
-            return LetterResultType.CORRECT;
+    private void evaluateCorrect(List<GuessLetter> guessLetters, List<AnswerLetter> wordLetters) {
+        for (int i = 0; i < wordLetters.size(); i++) {
+            final var guessLetter = guessLetters.get(i);
+            if (guessLetter.getLetter().equals(wordLetters.get(i).getLetter())) {
+                guessLetter.setResult(LetterResultType.CORRECT);
+                wordLetters.get(i).setResolved(true);
+            }
         }
-
-        if (word.contains(letterGuess)) {
-            return LetterResultType.WRONG_POSITION;
-        }
-
-        return LetterResultType.WRONG;
     }
 
+    private void evaluateWrongPosition(List<GuessLetter> guessLetters, List<AnswerLetter> wordLetters) {
+        for (final var guessLetter : guessLetters) {
+            if (guessLetter.getResult() != null) {
+                return;
+            }
+
+            final var match = wordLetters.stream()
+                .filter(it -> it.getLetter().equals(guessLetter.getLetter()) && !it.isResolved())
+                .findFirst();
+
+            if (match.isPresent()) {
+                match.get().setResolved(true);
+                guessLetter.setResult(LetterResultType.WRONG_POSITION);
+            } else {
+                guessLetter.setResult(LetterResultType.WRONG);
+            }
+        }
+    }
 
 }

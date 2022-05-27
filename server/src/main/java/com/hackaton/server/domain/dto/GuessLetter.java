@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LetterResult {
+public class GuessLetter {
     private String letter;
     private LetterResultType result;
 }
