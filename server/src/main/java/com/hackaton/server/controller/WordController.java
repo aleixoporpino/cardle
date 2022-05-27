@@ -44,6 +44,11 @@ public class WordController {
         produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public @ResponseBody GuessResponse guess(@RequestBody GuessRequest request) {
-        return guessService.guess(request);
+        final var guessResponse = guessService.guess(request);
+        if (request.getGuessNumber() == 5) {
+            final var game = gameRepository.findByCurrentTimeBetweenGameStartAndEnd(Instant.now());
+            guessResponse.setAnswer(game.getMake().getName());
+        }
+        return guessResponse;
     }
 }

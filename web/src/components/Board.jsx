@@ -11,6 +11,7 @@ const Board = ({ wordLength, maxAttempts }) => {
     return { letter: '', result: GuessResult.INITIAL, focus: index === 0, disabled: false };
   });
 
+  const [answer, setAnswer] = useState('');
   const [tilesMatrix, setTilesMatrix] = useState([initialTiles]);
   const [openResultModal, setOpenResultModal] = useState(false);
 
@@ -32,6 +33,7 @@ const Board = ({ wordLength, maxAttempts }) => {
         guess(getTilesLetters(tilesMatrix), tilesMatrix.length).then((response) => {
           const newTilesValues = [...tilesMatrix];
           newTilesValues[tilesMatrix.length - 1] = hydrateResult(response.data.result);
+          setAnswer(response.data.answer);
 
           if (isGuessCorrect(newTilesValues)) {
             setOpenResultModal(true);
@@ -61,6 +63,7 @@ const Board = ({ wordLength, maxAttempts }) => {
         totalGuesses={tilesMatrix.length}
         tilesMatrix={tilesMatrix}
         handleClose={() => setOpenResultModal(false)}
+        answer={answer}
       />
     </Box>
   );

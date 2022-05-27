@@ -18,4 +18,5 @@ public class GuessResponse {
     private String gameId;
     private List<GuessLetter> result;
     private int guessNumber;
+    private String answer;
 }

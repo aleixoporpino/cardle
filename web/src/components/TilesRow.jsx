@@ -19,7 +19,7 @@ const TilesRow = ({ tilesValues, handleTileValueChange, handleKeyDown, columnInd
     );
   }
   return (
-    <Grid id='boardGrid' container sx={{ pb: 2 }}>
+    <Grid id='boardGrid' container sx={{ pb: 2 }} justifyContent={'center'}>
       {tiles}
     </Grid>
   );

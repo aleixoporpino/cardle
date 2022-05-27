@@ -12,9 +12,9 @@ import {
 } from '@mui/material';
 import GuessResult from '../enums/GuessResult';
 import Countdown from './Countdown';
-import { getAnswer, isGuessCorrect } from '../utils/utils';
+import { isGuessCorrect } from '../utils/utils';
 
-const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
+const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses, answer }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const won = isGuessCorrect(tilesMatrix);
@@ -36,7 +36,7 @@ const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
   const title = won ? 'Congratulations!' : 'You lost!';
   const resultText = won
     ? `You won in ${totalGuesses} ${totalGuesses === 1 ? 'guess' : 'guesses'}`
-    : 'The word was: ' + getAnswer(tilesMatrix);
+    : `The word was: ${answer}`;
 
   return (
     <Dialog

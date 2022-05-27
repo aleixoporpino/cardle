@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 const Header = () => {
   return (
     <Box sx={{ pb: 3 }}>
-      <Typography variant='h2' color='#1abb99' fontWeight='bold'>
+      <Typography variant='h2' color='#1abb99' fontWeight='bold' letterSpacing={2}>
         CARDLE
       </Typography>
     </Box>
