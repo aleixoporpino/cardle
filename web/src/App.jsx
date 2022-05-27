@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { getGame } from './api/wordApi';
 
 function App() {
-  const [game, setGame] = useState({});
+  const [game, setGame] = useState(null);
   useEffect(() => {
     getGame().then((response) => {
       localStorage.setItem('gameId', response.data.gameId);
@@ -41,7 +41,9 @@ function App() {
       <CssBaseline />
       <Container sx={{ pt: 3, textAlign: 'center' }}>
         <Header />
-        <Board wordLength={game.wordLength} />
+        {game &&
+        <Board wordLength={game.wordLength}/>
+        }
       </Container>
     </ThemeProvider>
   );

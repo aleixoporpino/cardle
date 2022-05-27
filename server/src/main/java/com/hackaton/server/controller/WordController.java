@@ -28,7 +28,11 @@ public class WordController {
 
         final var response = new GameResponse();
         response.setGameId(game.getId());
-        response.setWordLength(game.getMake().getName().length());
+
+        final var wordWithNoSpacesOrDashes = game.getMake().getName()
+            .replaceAll("-", "")
+            .replaceAll(" ", "");
+        response.setWordLength(wordWithNoSpacesOrDashes.length());
         response.setGameEnd(game.getGameEnd());
 
         return response;
