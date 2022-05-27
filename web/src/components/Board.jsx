@@ -4,6 +4,7 @@ import { guess } from '../api/wordApi';
 import TilesRow from './TilesRow';
 import GuessResult from '../enums/GuessResult';
 import ResultModal from './ResultModal';
+import { getTilesLetters, isAllTilesFilled, isGuessCorrect } from '../utils/utils';
 
 const Board = ({ maxRows }) => {
   const initialTiles = [
@@ -13,7 +14,7 @@ const Board = ({ maxRows }) => {
     { letter: '', result: GuessResult.INITIAL, focus: false },
     { letter: '', result: GuessResult.INITIAL, focus: false },
   ];
-  const [tilesValues, setTilesValues] = useState([initialTiles]);
+  const [tilesMatrix, setTilesMatrix] = useState([initialTiles]);
   const [openResultModal, setOpenResultModal] = useState(false);
 
   const handleTileValueChange = (e, columnIndex, rowIndex) => {
@@ -22,50 +23,48 @@ const Board = ({ maxRows }) => {
       letter = Object.values(e.target.value)[1];
     }
     if (!/[^a-zA-Z]/.test(letter)) {
-      const newTilesValues = [...tilesValues];
+      const newTilesValues = [...tilesMatrix];
       newTilesValues[columnIndex][rowIndex].letter = letter;
-      setTilesValues(newTilesValues);
+      setTilesMatrix(newTilesValues);
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.code === 'Enter' || e.key === 'Enter') {
-      console.log('Enter pressed');
+      if (isAllTilesFilled(tilesMatrix)) {
+        guess(getTilesLetters(tilesMatrix), tilesMatrix.length).then((response) => {
+          const newTilesValues = [...tilesMatrix];
+          newTilesValues[tilesMatrix.length - 1] = response.data.result;
 
-      const isAllTilesFilled = !tilesValues.find((tiles) =>
-        tiles.find((tile) => tile.letter === ''),
-      );
-      if (isAllTilesFilled) {
-        guess('test', tilesValues.length).then((response) => {
-          const newTilesValues = [...tilesValues];
-          newTilesValues[tilesValues.length - 1] = response.data.result;
-          //TODO: Check correctness
-          if (tilesValues.length < maxRows) {
-            newTilesValues.push(initialTiles);
-          } else {
+          if (isGuessCorrect(newTilesValues)) {
             setOpenResultModal(true);
             return;
           }
-          setTilesValues(newTilesValues);
+
+          // Less than max number of rows reached
+          if (tilesMatrix.length < maxRows) {
+            newTilesValues.push(initialTiles);
+            setTilesMatrix(newTilesValues);
+          }
         });
       }
     }
   };
   return (
     <Box>
-      {tilesValues.map((result, index) => (
+      {tilesMatrix.map((result, index) => (
         <TilesRow
           key={`tilesRow${index}`}
-          tilesValues={tilesValues}
+          tilesValues={tilesMatrix}
           handleTileValueChange={handleTileValueChange}
           handleKeyDown={handleKeyDown}
           columnIndex={index}
-          disabled={tilesValues.length - 1 !== index}
+          disabled={tilesMatrix.length - 1 !== index}
         />
       ))}
       <ResultModal
         open={openResultModal}
-        totalGuesses={tilesValues.length}
+        totalGuesses={tilesMatrix.length}
         answer={'arise'}
         handleClose={() => setOpenResultModal(false)}
       />
