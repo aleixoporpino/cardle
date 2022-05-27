@@ -60,7 +60,7 @@ const Board = ({ wordLength }) => {
       <ResultModal
         open={openResultModal}
         totalGuesses={tilesMatrix.length}
-        answer={'arise'}
+        tilesMatrix={tilesMatrix}
         handleClose={() => setOpenResultModal(false)}
       />
     </Box>

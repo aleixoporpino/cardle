@@ -1,6 +1,7 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Box,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -9,10 +10,26 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import GuessResult from '../enums/GuessResult';
 
-const ResultModal = ({ open, handleClose, answer, totalGuesses }) => {
+const ResultModal = ({ open, handleClose, tilesMatrix, totalGuesses }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  const printMatrixResult = () => {
+    return tilesMatrix.map((row) => (
+      <div>
+        {row.map((tile) => {
+          return GuessResult[tile.result] === GuessResult.CORRECT
+            ? '🟩 \n'
+            : GuessResult[tile.result] === GuessResult.WRONG_POSITION
+            ? '🟨 \n'
+            : '🟥 \n';
+        })}
+      </div>
+    ));
+  };
+
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -35,10 +52,13 @@ const ResultModal = ({ open, handleClose, answer, totalGuesses }) => {
             <CloseIcon />
           </IconButton>
         ) : null}
-        {'You won!'}
+        {'Congratulations!'}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>You won in {totalGuesses} guesses</DialogContentText>
+        <Box sx={{ textAlign: 'center' }}>{printMatrixResult()}</Box>
+        <DialogContentText sx={{ pt: 2 }}>
+          You won in {totalGuesses} {`${totalGuesses === 1 ? 'guess' : 'guesses'}`}
+        </DialogContentText>
       </DialogContent>
     </Dialog>
   );
