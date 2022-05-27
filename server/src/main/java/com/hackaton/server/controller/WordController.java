@@ -1,23 +1,36 @@
 package com.hackaton.server.controller;
 
-import com.hackaton.server.domain.GuessRequest;
-import com.hackaton.server.domain.GuessResponse;
-import com.hackaton.server.domain.LetterResult;
-import com.hackaton.server.domain.LetterResultType;
+import com.hackaton.server.domain.dto.*;
+import com.hackaton.server.domain.entity.Game;
+import com.hackaton.server.repository.GameRepository;
+import com.hackaton.server.service.GuessService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class WordController {
 
+    private final GuessService guessService;
+    private final GameRepository gameRepository;
+
     @GetMapping(
-        path = "/word/length",
+        path = "/game",
         produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public int getWordLength() {
-        return 5;
+    public GameResponse getGame() {
+        final var game = gameRepository.findByCurrentTimeBetweenGameStartAndEnd(Instant.now());
+
+        final var response = new GameResponse();
+        response.setGameId(game.getId());
+        response.setWordLength(game.getMake().getName().length());
+
+        return response;
     }
 
     @PostMapping(
@@ -26,32 +39,6 @@ public class WordController {
         produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public @ResponseBody GuessResponse guess(@RequestBody GuessRequest request) {
-
-        final var response = new GuessResponse();
-
-        response.getResult().add(LetterResult.builder()
-                .letter("B")
-                .result(LetterResultType.WRONG)
-            .build());
-        response.getResult().add(LetterResult.builder()
-            .letter("U")
-            .result(LetterResultType.WRONG_POSITION)
-            .build());
-        response.getResult().add(LetterResult.builder()
-            .letter("I")
-            .result(LetterResultType.WRONG)
-            .build());
-        response.getResult().add(LetterResult.builder()
-            .letter("C")
-            .result(LetterResultType.WRONG_POSITION)
-            .build());
-        response.getResult().add(LetterResult.builder()
-            .letter("K")
-            .result(LetterResultType.WRONG)
-            .build());
-
-        response.setGuessNumber(request.getGuessNumber());
-
-        return response;
+        return guessService.guess(request);
     }
 }

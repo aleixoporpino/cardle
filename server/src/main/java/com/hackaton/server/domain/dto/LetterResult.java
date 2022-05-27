@@ -1,4 +1,4 @@
-package com.hackaton.server.domain;
+package com.hackaton.server.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
