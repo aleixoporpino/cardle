@@ -4,15 +4,15 @@ import { guess } from '../api/wordApi';
 import TilesRow from './TilesRow';
 import GuessResult from '../enums/GuessResult';
 import ResultModal from './ResultModal';
-import { getTilesLetters, isAllTilesFilled, isGuessCorrect } from '../utils/utils';
+import { getTilesLetters, hydrateResult, isAllTilesFilled, isGuessCorrect } from '../utils/utils';
 
-const Board = ({ maxRows }) => {
+const Board = ({ wordLength }) => {
   const initialTiles = [
-    { letter: '', result: GuessResult.INITIAL, focus: true },
-    { letter: '', result: GuessResult.INITIAL, focus: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false },
-    { letter: '', result: GuessResult.INITIAL, focus: false },
+    { letter: '', result: GuessResult.INITIAL, focus: true, disabled: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
+    { letter: '', result: GuessResult.INITIAL, focus: false, disabled: false },
   ];
   const [tilesMatrix, setTilesMatrix] = useState([initialTiles]);
   const [openResultModal, setOpenResultModal] = useState(false);
@@ -34,18 +34,14 @@ const Board = ({ maxRows }) => {
       if (isAllTilesFilled(tilesMatrix)) {
         guess(getTilesLetters(tilesMatrix), tilesMatrix.length).then((response) => {
           const newTilesValues = [...tilesMatrix];
-          newTilesValues[tilesMatrix.length - 1] = response.data.result;
+          newTilesValues[tilesMatrix.length - 1] = hydrateResult(response.data.result);
 
           if (isGuessCorrect(newTilesValues)) {
             setOpenResultModal(true);
-            return;
-          }
-
-          // Less than max number of rows reached
-          if (tilesMatrix.length < maxRows) {
+          } else if (tilesMatrix.length < wordLength) {
             newTilesValues.push(initialTiles);
-            setTilesMatrix(newTilesValues);
           }
+          setTilesMatrix(newTilesValues);
         });
       }
     }
@@ -59,7 +55,6 @@ const Board = ({ maxRows }) => {
           handleTileValueChange={handleTileValueChange}
           handleKeyDown={handleKeyDown}
           columnIndex={index}
-          disabled={tilesMatrix.length - 1 !== index}
         />
       ))}
       <ResultModal

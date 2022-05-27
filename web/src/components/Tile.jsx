@@ -3,7 +3,7 @@ import { Grid, TextField } from '@mui/material';
 import GuessResult from '../enums/GuessResult';
 import { getColor } from '../utils/utils';
 
-const Tile = ({ id, tile, onChange, onKeyDown, disabled }) => {
+const Tile = ({ id, tile, onChange, onKeyDown, disabled, tabIndex }) => {
   const tileColor = getColor(GuessResult[tile.result] || tile.result);
   return (
     <Grid id={`tileBox${id}`} sx={{ px: 2 }} item>
@@ -30,6 +30,7 @@ const Tile = ({ id, tile, onChange, onKeyDown, disabled }) => {
         disabled={disabled}
         autoFocus={tile.focus}
         color={GuessResult[tile.result] || tile.result}
+        tabIndex={tabIndex}
       />
     </Grid>
   );

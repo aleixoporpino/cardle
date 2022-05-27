@@ -28,3 +28,9 @@ export const isGuessCorrect = (tilesMatrix) => {
     return GuessResult[tile.result] !== GuessResult.CORRECT;
   });
 };
+
+export const hydrateResult = (tiles) => {
+  return tiles.map((tile, index) => {
+    return { ...tile, focus: index === 0, disabled: true };
+  });
+};
