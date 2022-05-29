@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Header from './components/Header';
