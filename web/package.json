@@ -2,7 +2,6 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://cardle-server-nau7apa67q-uc.a.run.app",
   "dependencies": {
     "@babel/core": "7.13.14",
     "@emotion/react": "^11.9.0",
@@ -40,7 +39,7 @@
     "build": "webpack --config webpack.config.prod.js",
     "test": "jest --watch",
     "eject": "react-scripts eject",
-    "start:dev": "webpack serve --config webpack.config.dev.js --port 3000",
+    "start:dev": "webpack serve --config webpack.config.dev.js --port 8080",
     "test:ci": "jest",
     "clean:build-development": "rimraf ./build && mkdir build",
     "prebuild-development": "run-p clean:build",

@@ -19,9 +19,15 @@ const Footer = () => (
       variant='h7'
       sx={{ width: '100%', fontWeight: 'lighter', fontSize: '11px', fontStyle: 'italic' }}
     >
-      E Inc. Hackaton 2022. Developed by{' '}
+      E Inc. Hackaton 2022
     </Typography>
     <br />
+    <Typography
+      variant='h7'
+      sx={{ width: '100%', fontWeight: 'lighter', fontSize: '11px', fontStyle: 'italic' }}
+    >
+      Developed by{' '}
+    </Typography>
     <Link
       variant='h7'
       sx={{

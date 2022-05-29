@@ -19,6 +19,11 @@ module.exports = {
     historyApiFallback: true,
     disableHostCheck: true,
     https: false,
+    proxy: {
+      '/': {
+        target: 'https://cardle-server-nau7apa67q-uc.a.run.app',
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
