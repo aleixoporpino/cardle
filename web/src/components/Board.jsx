@@ -24,29 +24,38 @@ const Board = ({ wordLength, maxAttempts }) => {
       const newTilesValues = [...tilesMatrix];
       newTilesValues[columnIndex][rowIndex].letter = letter;
       setTilesMatrix(newTilesValues);
+
+      checkAndGuess();
+      const nextTextField = document.getElementById('textFieldtile' + columnIndex + (rowIndex + 1));
+      nextTextField?.focus();
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.code === 'Enter' || e.key === 'Enter') {
-      if (isAllTilesFilled(tilesMatrix)) {
-        guess(getTilesLetters(tilesMatrix), tilesMatrix.length).then((response) => {
-          const newTilesValues = [...tilesMatrix];
-          newTilesValues[tilesMatrix.length - 1] = hydrateResult(response.data.result);
-          setAnswer(response.data.answer);
-
-          if (isGuessCorrect(newTilesValues)) {
-            setOpenResultModal(true);
-          } else if (tilesMatrix.length < maxAttempts) {
-            newTilesValues.push(initialTiles);
-          } else {
-            setOpenResultModal(true);
-          }
-          setTilesMatrix(newTilesValues);
-        });
-      }
+      checkAndGuess();
     }
   };
+
+  const checkAndGuess = () => {
+    if (isAllTilesFilled(tilesMatrix)) {
+      guess(getTilesLetters(tilesMatrix), tilesMatrix.length).then((response) => {
+        const newTilesValues = [...tilesMatrix];
+        newTilesValues[tilesMatrix.length - 1] = hydrateResult(response.data.result);
+        setAnswer(response.data.answer);
+
+        if (isGuessCorrect(newTilesValues)) {
+          setOpenResultModal(true);
+        } else if (tilesMatrix.length < maxAttempts) {
+          newTilesValues.push(initialTiles);
+        } else {
+          setOpenResultModal(true);
+        }
+        setTilesMatrix(newTilesValues);
+      });
+    }
+  };
+
   return (
     <Box>
       {tilesMatrix.map((result, index) => (
