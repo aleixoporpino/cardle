@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS cardle;
+
 CREATE TABLE IF NOT EXISTS `make`
 (
     `id`   CHAR(36)     NOT NULL,

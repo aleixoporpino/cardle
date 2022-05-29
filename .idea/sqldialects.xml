@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/server/src/main/resources/db/migration/V01__initial_data.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/server/src/main/resources/db/migration/V02__seed_game_data.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="MySQL" />
   </component>
 </project>
