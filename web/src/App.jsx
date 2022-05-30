@@ -1,9 +1,11 @@
+import React from 'react';
 import './App.css';
 import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Header from './components/Header';
 import Board from './components/Board';
 import { useEffect, useState } from 'react';
 import { getGame } from './api/wordApi';
+import Footer from './components/Footer';
 
 function App() {
   const [game, setGame] = useState(null);
@@ -42,6 +44,7 @@ function App() {
       <Container sx={{ pt: 3, textAlign: 'center' }}>
         <Header />
         {game && <Board wordLength={game.wordLength} maxAttempts={5} />}
+        <Footer />
       </Container>
     </ThemeProvider>
   );
