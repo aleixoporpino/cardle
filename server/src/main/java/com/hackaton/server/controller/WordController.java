@@ -14,7 +14,7 @@ import java.time.Instant;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://https://cardle-b22nro37ja-uc.a.run.app")
+@CrossOrigin(origins = "https://cardle-b22nro37ja-uc.a.run.app")
 public class WordController {
 
     private final GuessService guessService;
